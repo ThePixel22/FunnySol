@@ -1,0 +1,44 @@
+######################
+# Project Specific
+######################
+*~
+*/bin/**/*.class
+**/rebel.xml
+**/hotswap-agent.properties
+*.prefs
+*.spring*
+dev-docs/AdminLTE-2.3.7/**
+
+**/target/**
+
+######################
+# Node
+######################
+/node/**
+**/node_modules/**
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+######################
+# SASS
+######################
+.sass-cache/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
