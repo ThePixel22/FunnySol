@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -39,21 +42,19 @@ public class JwtFilter extends OncePerRequestFilter {
                 username = jwtTokenUtil.getUsernameFromToken(token);
             } catch (IllegalArgumentException e) {
                 log.error("Unable to get JWT Token", e);
-                //return;
             } catch (ExpiredJwtException e) {
                 log.error("JWT Token has expired", e);
-                //return;
             } catch (Exception e) {
                 log.error(e.toString());
-                //return;
             }
         } else {
             log.error("Bearer String not found in token");
-            //return;
         }
 
-
         if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
+            List<SimpleGrantedAuthority> updatedAuthorities = new ArrayList<SimpleGrantedAuthority>();
+            updatedAuthorities.add(authority);
             //UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             UserDetails userDetails = new User("funnySol","funnySol", new ArrayList<>() );
             if (jwtTokenUtil.validateJwtToken(token, userDetails)) {

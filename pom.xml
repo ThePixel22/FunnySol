@@ -11,5 +11,6 @@
 	<modules>
 		<module>rest-backend</module>
 		<module>common-utils</module>
+		<module>data-core</module>
 	</modules>
 </project>

@@ -35,7 +35,7 @@ public class JwtTokenUtil {
         if (rememberMe) {
             validity = new Date(now + this.JWT_TOKEN_VALIDITY*100000);
         } else {
-            validity = new Date(now + 30*1000);
+            validity = new Date(now + 3000*1000);
         }
 
         return Jwts.builder()

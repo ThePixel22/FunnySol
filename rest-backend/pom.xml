@@ -69,6 +69,11 @@
         	<artifactId>common-utils</artifactId>
         	<version>${project.version}</version>
         </dependency>
+		<dependency>
+			<groupId>sol.funny</groupId>
+			<artifactId>data-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
