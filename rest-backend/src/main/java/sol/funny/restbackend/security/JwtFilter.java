@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -28,8 +29,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    //@Autowired
-    //JwtUserDetailsService userDetailsService;
+    @Autowired
+    JwtUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,8 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
             List<SimpleGrantedAuthority> updatedAuthorities = new ArrayList<SimpleGrantedAuthority>();
             updatedAuthorities.add(authority);
-            //UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            UserDetails userDetails = new User("funnySol","funnySol", new ArrayList<>() );
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtTokenUtil.validateJwtToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken
                         authenticationToken = new UsernamePasswordAuthenticationToken(
