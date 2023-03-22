@@ -12,5 +12,6 @@
 		<module>rest-backend</module>
 		<module>common-utils</module>
 		<module>data-core</module>
+		<module>demo-batch</module>
 	</modules>
 </project>
