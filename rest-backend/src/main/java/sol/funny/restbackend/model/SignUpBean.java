@@ -7,6 +7,8 @@ public class SignUpBean {
 
     private String confirmPassword;
 
+    private String languageCode;
+
     public String getUserName() {
         return userName;
     }
@@ -29,5 +31,13 @@ public class SignUpBean {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 }

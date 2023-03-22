@@ -4,8 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,16 +31,16 @@ public class JwtTokenUtil {
         Date validity;
 
         if (rememberMe) {
-            validity = new Date(now + this.JWT_TOKEN_VALIDITY*100000);
+            validity = new Date(now + this.JWT_TOKEN_VALIDITY * 100000);
         } else {
-            validity = new Date(now + 3000*1000);
+            validity = new Date(now + 3000 * 1000);
         }
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 

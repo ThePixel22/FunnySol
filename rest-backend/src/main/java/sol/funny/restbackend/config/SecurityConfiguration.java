@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import sol.funny.commonutils.common.CommonKeys;
 import sol.funny.restbackend.security.JwtFilter;
 
 @Configuration
@@ -36,8 +37,8 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/genToken","/signIn","/signUp").permitAll()
-                .antMatchers("/ping").hasAnyRole("ADMIN","HUHU")
+                .authorizeRequests().antMatchers("/genToken", "/signIn", "/signUp").permitAll()
+                .antMatchers("/ping").hasAnyRole(CommonKeys.ROLE_ADMIN)
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

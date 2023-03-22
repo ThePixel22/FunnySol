@@ -1,12 +1,16 @@
 package sol.funny.restbackend.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import sol.funny.commonutils.common.CommonKeys;
+import sol.funny.commonutils.common.ErrorCode;
 import sol.funny.commonutils.sercurity.PasswordEncoder;
 import sol.funny.datacore.beans.ResultData;
 import sol.funny.datacore.entity.domain.Client;
@@ -16,6 +20,7 @@ import sol.funny.restbackend.model.SignUpBean;
 import sol.funny.restbackend.security.JwtTokenUtil;
 
 import java.util.Date;
+import java.util.Locale;
 
 @RestController
 public class UserResource {
@@ -26,24 +31,30 @@ public class UserResource {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    MessageSource messageSource;
+
     @GetMapping("/ping")
     public String home() {
         return "0k";
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<ResultData> signUp(@RequestBody SignUpBean request){
-        if(!request.getConfirmPassword().equals(request.getPassword())) {
+    public ResponseEntity<ResultData> signUp(@RequestBody SignUpBean request) {
+        if (!request.getConfirmPassword().equals(request.getPassword())) {
             ResultData resultData = new ResultData();
-            resultData.setErrorMessage("error! Password don't match!");
-            resultData.setErrorCode("E501");
+            resultData.setErrorCode(ErrorCode.EC_PASSWORD_DO_NOT_MATCH);
+            resultData.setErrorMessage(
+                    messageSource.getMessage(ErrorCode.EC_PASSWORD_DO_NOT_MATCH, null, getLocale(request.getLanguageCode())));
             return ResponseEntity.ok().body(resultData);
         }
 
-        if(clientRepository.existsByUserNameAndStatus(request.getUserName(), "A")){
+        if (clientRepository.existsByUserNameAndStatus(request.getUserName(), "A")) {
             ResultData resultData = new ResultData();
-            resultData.setErrorMessage("error! User name is exists!");
-            resultData.setErrorCode("E501");
+            resultData.setErrorCode(ErrorCode.EC_USER_NAME_IS_EXISTS);
+            resultData.setErrorMessage(
+                    messageSource.getMessage(ErrorCode.EC_USER_NAME_IS_EXISTS, null, getLocale(request.getLanguageCode())));
+
             return ResponseEntity.ok().body(resultData);
         }
 
@@ -57,7 +68,7 @@ public class UserResource {
 
         clientRepository.save(newClient);
 
-        ResultData resultData  = ResultData.builder().errorMessage("ok")
+        ResultData resultData = ResultData.builder().errorMessage("ok")
                 .errorCode("00")
                 .data(newClient).build();
         return ResponseEntity.ok(resultData);
@@ -68,8 +79,10 @@ public class UserResource {
         Client client = clientRepository.getClientByUserNameAndStatus(request.getUserName(), "A");
         if (client == null) {
             ResultData resultData = new ResultData();
-            resultData.setErrorMessage("error! Client don't exists!");
-            resultData.setErrorCode("E502");
+            resultData.setErrorCode(ErrorCode.EC_CLIENT_NOT_EXISTS);
+            resultData.setErrorMessage(
+                    messageSource.getMessage(ErrorCode.EC_CLIENT_NOT_EXISTS, null, getLocale(request.getLanguageCode())));
+
             return ResponseEntity.ok().body(resultData);
         }
 
@@ -83,8 +96,9 @@ public class UserResource {
             return ResponseEntity.ok(resultData);
         } else {
             ResultData resultData = new ResultData();
-            resultData.setErrorMessage("error! Password isn't correct!");
-            resultData.setErrorCode("E503");
+            resultData.setErrorCode(ErrorCode.EC_PASSWORD_NOT_CORRECT);
+            resultData.setErrorMessage(
+                    messageSource.getMessage(ErrorCode.EC_PASSWORD_NOT_CORRECT, null, getLocale(request.getLanguageCode())));
             return ResponseEntity.ok().body(resultData);
         }
     }
@@ -98,6 +112,11 @@ public class UserResource {
     @GetMapping("/cbd")
     public String cbd() {
         return "0k";
+    }
+
+    public Locale getLocale(String languageCode) {
+        languageCode = StringUtils.isEmpty(languageCode) ? CommonKeys.VIETNAMESE_LANGUAGE : languageCode;
+        return new Locale(languageCode, "");
     }
 
 }

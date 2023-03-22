@@ -5,6 +5,8 @@ public class SignInBean {
 
     private String password;
 
+    private String languageCode;
+
     public String getUserName() {
         return userName;
     }
@@ -19,5 +21,13 @@ public class SignInBean {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 }
