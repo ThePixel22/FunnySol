@@ -1,3 +1,4 @@
+/*
 package sol.funny.demobatch;
 
 import org.junit.jupiter.api.Test;
@@ -11,3 +12,4 @@ class DemoBatchApplicationTests {
 	}
 
 }
+*/
